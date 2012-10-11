@@ -94,6 +94,8 @@ typedef union {
 extern void SPI2_Init();
 extern void SPI_Init(uint32_t bitsPerSecond);
 extern void App_Exosite(void);
+extern int16_t GetUserCIK(void);
+extern NVSettings_t GNV_Setting;
 extern void App_WebProvisioning(void);
 extern void App_OverTheAirProgrammingPushMetheod(void);
 int  main(void)
@@ -103,8 +105,16 @@ int  main(void)
   
     HardwareSetup();
     
-        /* Default app mode */
+    /* Default app mode */
     AppMode = GAINSPAN_DEMO;
+    
+    /* If the CIK is exist, auto into the Exosite mode */
+    NVSettingsLoad(&GNV_Setting);
+    int16_t result = GetUserCIK();
+    if(result > 0)
+    {
+      AppMode = RUN_EXOSITE;
+    }
     
     /* Determine if SW1 & SW3 is pressed at power up to enter programming mode */
     if (Switch1IsPressed() && Switch3IsPressed()) {

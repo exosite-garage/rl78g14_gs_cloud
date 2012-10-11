@@ -734,7 +734,7 @@ void App_Exosite(void)
   // (300 ms for GS1011 and 1000 ms for GS1500)
   MSTimerDelay(1000);
   
-  NVSettingsLoad(&GNV_Setting);
+  //-Brian NVSettingsLoad(&GNV_Setting);
 
   rxMsgId = WIFI_init(1);  // Show MAC address and Version
   //if (rxMsgId != ATLIBGS_MSG_ID_OK) 
