@@ -25,12 +25,12 @@ In License Wizard, choose Register with IAR Systems to get an evaluation license
 4) Extract the project and open ADKRenesasG14 as workspace with IAR.<br>
 5) Make sure SW5.2 is OFF then plug in the USB cable to your PC.<br>
 6) Compile the project and download the program to the board from IAR.<br>
-7) Press SW 2 down and then run the program on IAR.
-8) Use a smart phone or a laptop that can select WiFi Access Point of your RL78 to connect to provision AP.
-9) Open http://192.168.240.1/prov.html, click Wireless and Network Configuration, click Existing Network, select the appropriate network to join, input your pass phase and then save.
-10) Stop program on IAR and unplug USB cable, put SW 5.2 ON.
-11) Press SW 1 down and plug USB cable at the same time.
-12) Release Switch 1 when "Cloud Demo" shows on the LCD.
+7) Press SW 2 down and then run the program on IAR.<br>
+8) Use a smart phone or a laptop that can select WiFi Access Point of your RL78 to connect to provision AP.<br>
+9) Open http://192.168.240.1/prov.html, click Wireless and Network Configuration, click Existing Network, select the appropriate network to join, input your pass phase and then save.<br>
+10) Stop program on IAR and unplug USB cable, put SW 5.2 ON.<br>
+11) Press SW 1 down and plug USB cable at the same time.<br>
+12) Release Switch 1 when "Cloud Demo" shows on the LCD.<br>
 13) If the module successfully associates with your WiFi Access Point and connects to the Exosite server, the device will exchange security keys and will be activated.<br>
 14) When connected and activated, the device will send "ping", board temp and ADC1 values periodically. Verify this by checking the data sources on https://renesas.exosite.com Portal.<br>
 15) When connected, the LEDs on the board can be turned on and off from the cloud by turning the LED ON/OFF Switch on your dashboard or modifying the "LED Control" command data source on your https://renesas.exosite.com Portal (or via the API).<br>
