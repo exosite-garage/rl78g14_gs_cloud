@@ -17,8 +17,7 @@ Tested and developed with IAR for RL78 30-day evaluation 1.20.3.<br>
 ========================================
 Quick Start
 ========================================
-Your RL78G14 should have come with cloud connectivity pre-programmed, but if you need to re-apply the Exosite enabled demo back on your<br>
-board, then you can follow the steps below.<br>
+Your RL78G14 should have come with cloud connectivity pre-programmed, but if you need to re-apply the Exosite enabled demo back on your board, then you can follow the steps below.<br>
 Choose one of the following options before step 8:<br>
 
 Option A: Factory default binary file<br>
