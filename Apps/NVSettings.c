@@ -69,7 +69,7 @@ void NVSettingsInit(NVSettings_t *settings)
         settings->webprov.security = ATLIBGS_SMWPA2PSK;
 #else
         settings->webprov.password[0] = '\0';
-        settings->webprov.security = ATLIBGS_SMOPEN;
+        settings->webprov.security = (ATLIBGS_PROVSECURITY_E)ATLIBGS_SMOPEN;
 #endif
     settings->webprov.station = ATLIBGS_STATIONMODE_INFRASTRUCTURE;
     settings->webprov.dhcp_enable = 1;
@@ -92,3 +92,4 @@ uint32_t NVSettingsChecksum(const NVSettings_t *settings)
 /*-------------------------------------------------------------------------*
  * End of File:  NVSettings.c
  *-------------------------------------------------------------------------*/
+

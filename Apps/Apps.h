@@ -25,6 +25,8 @@
 extern uint8_t G_received[APP_MAX_RECEIVED_DATA + 1];
 extern unsigned int G_receivedCount;
 extern NVSettings_t G_nvsettings;
+extern uint8_t cid;
+extern char G_command[ATLIBGS_TX_CMD_MAX_SIZE];
 
 /*-------------------------------------------------------------------------*
  * Prototypes:
@@ -55,3 +57,5 @@ ATLIBGS_MSG_ID_E App_Connect(ATLIBGS_WEB_PROV_SETTINGS *webprov);
 /*-------------------------------------------------------------------------*
  * End of File:  Apps.h
  *-------------------------------------------------------------------------*/
+
+

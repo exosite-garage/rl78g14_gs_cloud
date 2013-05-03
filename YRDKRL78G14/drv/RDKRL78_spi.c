@@ -1,4 +1,6 @@
-// RDKRL78_spi.c
+/*-------------------------------------------------------------------------*
+ * File:  RDKRL78_spi.c
+ *-------------------------------------------------------------------------*/
 //#include <stdint.h>
 #include <stdbool.h>
 #include "r_cg_macrodriver.h"
@@ -98,4 +100,5 @@ uint8_t SPI_SendReceive(uint8_t aDevice, uint8_t *aTXData, uint32_t aTXLength, u
     else
         return 1;
 }
+
 

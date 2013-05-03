@@ -140,7 +140,7 @@ Macro definitions (Register bit)
 #define _00_AD_NEGATIVE_VSS             (0x00U) /* use VSS as VREF(-) */
 #define _20_AD_NEGATIVE_AVREFM          (0x20U) /* use AVREFM as VREF(-) */
 /* AD conversion result upper/lower bound value selection (ADRCK) */
-#define _00_AD_AREA_MODE_1              (0x00U) /* generates INTAD when ADLL ¡Ü ADCRH ¡Ü ADUL */
+#define _00_AD_AREA_MODE_1              (0x00U) /* generates INTAD when ADLL ? ADCRH ? ADUL */
 #define _08_AD_AREA_MODE_2_3            (0x08U) /* generates INTAD when ADUL < ADCRH or ADLL > ADCRH */
 /* AD wakeup function selection (AWC) */
 #define _00_AD_WAKEUP_OFF               (0x00U) /* stop wakeup function */
@@ -217,3 +217,4 @@ void R_ADC_Get_Result(uint16_t * const buffer);
 void R_ADC_SelectADChannel(ad_channel_t channel);
 /* End user code. Do not edit comment generated here */
 #endif
+

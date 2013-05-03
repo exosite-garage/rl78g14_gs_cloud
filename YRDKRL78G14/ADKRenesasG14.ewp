@@ -1802,13 +1802,16 @@
       <name>$PROJ_DIR$\..\Apps\App_Startup.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\Apps\Apps.h</name>
+      <name>$PROJ_DIR$\..\Apps\apps.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Apps\NVSettings.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Apps\NVSettings.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Apps\Wifi_Helper.c</name>
     </file>
   </group>
   <group>
@@ -1824,6 +1827,33 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\CmdLib\GainSpan_SPI.h</name>
+    </file>
+  </group>
+  <group>
+    <name>exosite</name>
+    <file>
+      <name>$PROJ_DIR$\..\exosite\exosite.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\exosite\exosite.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\exosite\exosite_hal.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\exosite\exosite_hal.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\exosite\exosite_meta.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\exosite\exosite_meta.h</name>
+    </file>
+  </group>
+  <group>
+    <name>inc</name>
+    <file>
+      <name>$PROJ_DIR$\..\inc\common.h</name>
     </file>
   </group>
   <group>

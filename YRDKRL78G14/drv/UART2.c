@@ -371,6 +371,7 @@ __interrupt void UART2_TX_ISRHandler(void)
     }
 }
 
+#if 0
 /*---------------------------------------------------------------------------*
  * Interrupt Routine:  UART2_RX_ISRHandler
  *---------------------------------------------------------------------------*
@@ -407,6 +408,7 @@ __interrupt void UART2_RX_ISRHandler(void)
     /* Done with the receive interrupt */
     SRIF0 = 0U;	/* clear INTSR0 interrupt flag */
 }
+#endif
 
 /*---------------------------------------------------------------------------*
  * Interrupt Routine:  UART2_RXError_ISRHandler
@@ -442,3 +444,5 @@ __interrupt void UART2_RXError_ISRHandler(void)
 /*-------------------------------------------------------------------------*
  * End of File:  UART2.c
  *-------------------------------------------------------------------------*/
+
+

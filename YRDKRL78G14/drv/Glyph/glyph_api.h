@@ -114,7 +114,7 @@ typedef enum {
     GLYPH_FONT_WINFREESYSTEM14_BY_16,   // Not Compiled in Library
     GLYPH_FONT_HELVR10,                 // Not Compiled in Library
     GLYPH_FONT_BITMAP,                  // Available
-	GLYPH_FONT_LOGOS                    // Available
+    GLYPH_FONT_LOGOS                    // Available
 } T_glyphFont ;
 
 /******************************************************************************
@@ -277,4 +277,6 @@ T_glyphError GlyphSetContrast(T_glyphHandle aHandle, int16_t nContrast) ;
 T_glyphError GlyphSetContrastBoost(T_glyphHandle aHandle, uint8_t cContrastBoost) ;
 
 #endif /* GLYPH_LIB_GLYPH_API_HEADER_FILE */
+
+
 

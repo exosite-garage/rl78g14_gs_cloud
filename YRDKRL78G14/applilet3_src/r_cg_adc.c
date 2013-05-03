@@ -138,19 +138,20 @@ void R_ADC_Get_Result(uint16_t * const buffer)
 **-----------------------------------------------------------------------------
 **
 **  Abstract:
-**	This function selects analog input channel.
+**  This function selects analog input channel.
 **
 **  Parameters:
-**	channel: analog input channel
+**  channel: analog input channel
 **
 **  Returns:
-**	MD_OK
-**	MD_ARGERROR
+**  MD_OK
+**  MD_ARGERROR
 **
 **-----------------------------------------------------------------------------
 */
 void R_ADC_SelectADChannel(ad_channel_t channel)
 {
-	ADS = (uint8_t)channel;
+  ADS = (uint8_t)channel;
 }
 /* End user code. Do not edit comment generated here */
+

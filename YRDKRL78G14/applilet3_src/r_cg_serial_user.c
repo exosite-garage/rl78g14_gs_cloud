@@ -688,3 +688,4 @@ static void r_iica0_callback_master_sendend(void)
 #endif
 /* Start user code for adding. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
+

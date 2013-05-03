@@ -78,3 +78,5 @@ void ST7579_Send16bitsCommand(T_glyphHandle aHandle, uint16_t nCommand) ;
 
 #endif /* __GLYPH__ST7579_LCD_HEADER_FILE */
 
+
+

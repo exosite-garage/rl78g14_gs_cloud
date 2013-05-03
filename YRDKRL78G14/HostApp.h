@@ -1,3 +1,7 @@
+/*-------------------------------------------------------------------------*
+ * File:  HostApp.h
+ *-------------------------------------------------------------------------*/
+
 #ifndef HOST_APP_H_
 #define HOST_APP_H_
 
@@ -61,34 +65,6 @@
 #define HOST_APP_AP_CHANNEL          NULL
 
 // Enable one of the securities below 
-//-----------------------------------------------------------------------------
-/*  Exosite demo WPA security  */
-#define HOST_APP_WPA2
-
-#ifdef HOST_APP_WPA2
-#define HOST_APP_AP_SSID              "exosite_wireless_dmz" 
-#define HOST_APP_AP_SEC_PSK           "09243A7441"  
-#else
-#define HOST_APP_AP_SSID              "GuLou"
-#endif
-
-//-----------------------------------------------------------------------------
-/* Exosite demo WEP security */
-//#define  HOST_APP_SEC_WEP
-//#define  HOST_APP_AP_SEC_WEP         "09243A7441"
-//#define  HOST_APP_AP_SSID            "exosite_wireless_dmz"
-
-//-----------------------------------------------------------------------------
-/*  Exosite demo OPEN security  */
-//#define HOST_APP_AP_SSID            "exosite_demo"
-//#define HOST_APP_SEC_OPEN
-
-//-----------------------------------------------------------------------------
-/*  Exosite demo WPA2 security     */
-//#define HOST_APP_AP_SSID              "exosite_demo_wpa"
-//#define HOST_APP_AP_SEC_PSK           "09243A7441"
-//#define HOST_APP_WPA2
-
 // #define HOST_APP_DEBUG_ENABLE
 
 #endif

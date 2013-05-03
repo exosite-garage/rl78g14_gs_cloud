@@ -166,13 +166,13 @@ void LCDDisplayLogo()
 {
     uint8_t font;
     
-    GlyphGetFont(G_lcd, &font);
+    GlyphGetFont(G_lcd, (T_glyphFont *)&font);
     
     GlyphSetFont(G_lcd, GLYPH_FONT_LOGOS);
     GlyphSetXY (G_lcd, 8, 0);
     GlyphString(G_lcd, 0, 1);
     
-    GlyphSetFont(G_lcd, font);
+    GlyphSetFont(G_lcd, (T_glyphFont)font);
 }
 /******************************************************************************
 * End of function LCDFont
@@ -181,4 +181,6 @@ void LCDDisplayLogo()
 /******************************************************************************
 * End of function DisplayString
 ******************************************************************************/
+
+
 

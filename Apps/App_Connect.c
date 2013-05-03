@@ -89,7 +89,7 @@ ATLIBGS_MSG_ID_E App_Connect(ATLIBGS_WEB_PROV_SETTINGS *wp)
             }
         }
 
-        if (wp->security != ATLIBGS_SMOPEN) {
+        if ((ATLIBGS_SECURITYMODE_E)wp->security != ATLIBGS_SMOPEN) {
             /* Store the PSK value. This call takes might take few seconds to return */
             do {
                 DisplayLCD(LCD_LINE8, "Setting PSK");
@@ -131,3 +131,4 @@ ATLIBGS_MSG_ID_E App_Connect(ATLIBGS_WEB_PROV_SETTINGS *wp)
 /*-------------------------------------------------------------------------*
  * End of File:  App_Connect.c
  *-------------------------------------------------------------------------*/
+

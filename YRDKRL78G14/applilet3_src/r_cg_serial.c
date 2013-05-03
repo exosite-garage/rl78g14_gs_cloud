@@ -860,3 +860,4 @@ MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * const rx_buf, uint16_t r
 /* Start user code for adding. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
+

@@ -2736,7 +2736,7 @@ AtLib_ConvertNumberTo4DigitASCII(uint32_t myNum, int8_t *pStr)
 	digit3 = ((myNum%1000)%100)/10;
 	digit4 = ((myNum%1000)%100)%10;
 
-	sprintf(pStr,"%d%d%d%d",digit1,digit2,digit3,digit4);
+	sprintf((char *)pStr,"%d%d%d%d",(char)digit1,(char)digit2,(char)digit3,(char)digit4);
 	
 }
 
@@ -2763,10 +2763,10 @@ void AtLib_GSLinkSendValue( int8_t *pTag, uint8_t cid, int32_t value)
     uint32_t command_length;   int8_t cData[5], cDataLen[5];
     int8_t dataBuf[20];
     
-    itoa(value, cData, 10);
+    itoa((long)value, (char *)cData, 10);
     
-    sprintf (&(dataBuf[0]),"%s%c%s", pTag,':',cData); 
-    command_length = strlen(dataBuf);      /* Get command length */
+    sprintf ((char *)&(dataBuf[0]),"%s%c%s", (char *)pTag,':',(char *)cData); 
+    command_length = strlen((char *)dataBuf);      /* Get command length */
     AtLib_ConvertNumberTo4DigitASCII(command_length, cDataLen);
      
     sprintf ( &(at_cmd_buf[0]),"%c%c%c%s%s",ATLIBGS_ESC_CHAR,'G', cid,cDataLen, dataBuf); 
@@ -2806,8 +2806,8 @@ void AtLib_GSLinkSendTempValue( int8_t *pTag, uint8_t cid)
         sprintf (&(dataBuf[0]),"%s%c%.1fF", pTag,':',gTemp_F);       
     }
 #endif
-    sprintf (&(dataBuf[0]),"%s%c%.1fF", pTag,':',gTemp_F);   
-    command_length = strlen(dataBuf);      /* Get command length */
+    sprintf ((char *)&(dataBuf[0]),"%s%c%.1fF", (char *)pTag,':',gTemp_F);   
+    command_length = strlen((char *)dataBuf);      /* Get command length */
     AtLib_ConvertNumberTo4DigitASCII(command_length, cDataLen);
      
     sprintf ( &(at_cmd_buf[0]),"%c%c%c%s%s",ATLIBGS_ESC_CHAR,'G', cid,cDataLen, dataBuf); 
@@ -2825,15 +2825,16 @@ void AtLib_GSLinkSendTempValue( int8_t *pTag, uint8_t cid)
 
 void AtLib_GSLinkSend3Value( int8_t *pTag, uint8_t cid, int32_t value1, int32_t value2, int32_t value3)
 {
-    uint32_t command_length;   int8_t cData1[5], cData2[5], cData3[5], cDataLen[5];
+    uint32_t command_length;
+    int8_t cData1[5], cData2[5], cData3[5], cDataLen[5];
     int8_t dataBuf[20];
     
-    itoa(value1, cData1, 10);
-    itoa(value2, cData2, 10);
-    itoa(value3, cData3, 10);
+    itoa(value1, (char *)cData1, 10);
+    itoa(value2, (char *)cData2, 10);
+    itoa(value3, (char *)cData3, 10);
     
-    sprintf (&(dataBuf[0]),"%s%c%s,%s,%s", pTag,':',cData1, cData2, cData3); 
-    command_length = strlen(dataBuf);      /* Get command length */
+    sprintf ((char *)&(dataBuf[0]),"%s%c%s,%s,%s", (char *)pTag,':',(char *)cData1, (char *)cData2, (char *)cData3); 
+    command_length = strlen((char *)dataBuf);      /* Get command length */
     AtLib_ConvertNumberTo4DigitASCII(command_length, cDataLen);
      
     sprintf ( &(at_cmd_buf[0]),"%c%c%c%s%s",ATLIBGS_ESC_CHAR,'G',cid,cDataLen, dataBuf); 
@@ -2871,7 +2872,7 @@ void AtLib_GSLinkGetPostResp(uint8_t cid, uint8_t gslinkType, int32_t TimeOut, u
 
 	uint32_t command_length;   int8_t cTimeout[5];  uint8_t TxCRD=0xD; 
     
-    itoa(TimeOut, cTimeout, 10);
+    itoa(TimeOut, (char *)cTimeout, 10);
     
     sprintf (&(at_cmd_buf[0]),"%s%c,%x,%s,%s,%s,%x","AT+XMLSEND=",cid, gslinkType, cTimeout, pURL, pHdTag, numOfValue); 
      
@@ -5078,7 +5079,7 @@ ATLIBGS_MSG_ID_E AtLibGs_SetSocketOptions(
     sprintf(
             cmd,
             "AT+SETSOCKOPT=" _F8_ "," _F16_ "," _F16_ "," _F32_ "," _F16_ "\r\n",
-            cid, type, param, value, length);
+            (char)cid, (int)type, (int)param, (long)value, (int)length);
 
     return AtLibGs_CommandSendString(cmd);
 }
@@ -5689,4 +5690,5 @@ ATLIBGS_MSG_ID_E  AtLibGs_RegisterMDNSService(char *pServerName, char *pServerSu
 /*-------------------------------------------------------------------------*
  * End of File:  AtCmdLib.c
  *-------------------------------------------------------------------------*/
+
 

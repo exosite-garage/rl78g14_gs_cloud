@@ -149,3 +149,6 @@ T_glyphError GlyphLCDOpen(T_glyphHandle aHandle, int16_t aAddress)
 
     return GLYPH_ERROR_NONE;
 }
+
+
+

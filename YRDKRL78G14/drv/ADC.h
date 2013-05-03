@@ -103,7 +103,7 @@
 #define _AD_NEGATIVE_VSS             (0x00U) /* use VSS as VREF(-) */
 #define _AD_NEGATIVE_AVREFM          (0x20U) /* use AVREFM as VREF(-) */
 /* AD conversion result upper/lower bound value selection (ADRCK) */
-#define _AD_AREA_MODE_1              (0x00U) /* generates INTAD when ADLL ¡Ü ADCRH ¡Ü ADUL */
+#define _AD_AREA_MODE_1              (0x00U) /* generates INTAD when ADLL !U ADCRH !U ADUL */
 #define _AD_AREA_MODE_2_3            (0x08U) /* generates INTAD when ADUL < ADCRH or ADLL > ADCRH */
 /* AD wakeup function selection (AWC) */
 #define _AD_WAKEUP_OFF               (0x00U) /* stop wakeup function */
@@ -165,3 +165,5 @@ uint32_t ADC_GetReading(uint8_t channel);
 /*-------------------------------------------------------------------------*
  * End of File:  ADC.h
  *-------------------------------------------------------------------------*/
+
+

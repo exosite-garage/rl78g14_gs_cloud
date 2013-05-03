@@ -29,6 +29,9 @@
 #include "stdio.h"
 #include "string.h"
 #include "led.h"
+#include <exosite/exosite.h> //Include the exosite.h for Exosite's CIK read function
+#include <exosite/exosite_meta.h> //Include the exosite_meta.h for Exosite's CIK read function
+
 extern void LEDFlash(uint32_t timeout);
 extern void led_task(void);
 extern void DisplayLCD(uint8_t, const uint8_t *);
@@ -64,7 +67,8 @@ typedef enum {
     RUN_EXOSITE,
     RUN_PROVISIONING,
     RUN_OVER_AIR_DOWNLOAD,
-    GAINSPAN_DEMO
+    GAINSPAN_DEMO,
+    EXOSITE_ERASE,
 }AppMode_T;
 
 typedef enum {
@@ -94,7 +98,7 @@ typedef union {
 extern void SPI2_Init();
 extern void SPI_Init(uint32_t bitsPerSecond);
 extern void App_Exosite(void);
-extern int16_t GetUserCIK(void);
+//- old renesas's function extern int16_t GetUserCIK(void);
 extern NVSettings_t GNV_Setting;
 extern void App_WebProvisioning(void);
 extern void App_OverTheAirProgrammingPushMetheod(void);
@@ -104,21 +108,26 @@ int  main(void)
     char LCDString[30], temp_char[2]; uint16_t temp; float ftemp;
   
     HardwareSetup();
-    
+
+    /************************initializa LCD module********************************/
+    SPI2_Init();
+    InitialiseLCD();
+    led_init();
+    MSTimerInit();
+
     /* Default app mode */
     AppMode = GAINSPAN_DEMO;
     
     /* If the CIK is exist, auto into the Exosite mode */
     NVSettingsLoad(&GNV_Setting);
-    int16_t result = GetUserCIK();
-    if(result > 0)
-    {
-      AppMode = RUN_EXOSITE;
-    }
     
     /* Determine if SW1 & SW3 is pressed at power up to enter programming mode */
     if (Switch1IsPressed() && Switch3IsPressed()) {
          AppMode = PROGRAM_MODE;
+    }
+    else if(Switch3IsPressed() && Switch2IsPressed())
+    {
+         AppMode = EXOSITE_ERASE;
     }
     else if(Switch1IsPressed())
     {
@@ -132,12 +141,6 @@ int  main(void)
     {
         AppMode = RUN_OVER_AIR_DOWNLOAD;
     }
-    
-    /************************initializa LCD module********************************/
-    SPI2_Init();
-    InitialiseLCD();
-    led_init();
-    MSTimerInit();
     
     if(AppMode == GAINSPAN_DEMO) {
         LCDDisplayLogo();
@@ -162,6 +165,10 @@ int  main(void)
         ClearLCD();
         
         LCDSelectFont(FONT_LARGE);
+        if(Exosite_GetCIK(NULL))
+        {
+          AppMode = RUN_EXOSITE;
+        }
     }
     
     DisplayLCD(LCD_LINE1, "Starting..."); 
@@ -191,6 +198,17 @@ int  main(void)
      else if(AppMode == RUN_OVER_AIR_DOWNLOAD)
     {
        App_OverTheAirProgrammingPushMetheod();
+    }
+    else if (AppMode == EXOSITE_ERASE)
+    {
+       ClearLCD();
+       LCDSelectFont(FONT_SMALL);
+       DisplayLCD(LCD_LINE3, "EEPROM ERASING ... ");
+       MSTimerDelay(2000);
+       Exosite_Init("renesas", "rl78g14", IF_WIFI, 1);
+       DisplayLCD(LCD_LINE3, "                   ");
+       DisplayLCD(LCD_LINE4, "Please reset device");
+       while(1);
     }
     else{
         UART0_Start(GAINSPAN_CONSOLE_BAUD);
