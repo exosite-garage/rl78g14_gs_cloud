@@ -306,13 +306,13 @@ Exosite_Activate(void)
           crlf = 0;
           // check the cik length from http response
           if (cik_ctrl == 0 && 'L' == *p) // Find 'L'ength:
-            cik_ctrl = 1;
-          else if (cik_ctrl == 4 && 'g' == *p) // Find Len'g'th:
-            cik_ctrl = 5;
-          else if (cik_ctrl >= 1 && cik_ctrl < 5)
+            cik_ctrl += 1;
+          else if (cik_ctrl == 3 && 'g' == *p) // Find Len'g'th:
+            cik_ctrl += 1;
+          else if (cik_ctrl >= 1 && cik_ctrl < 3)
             cik_ctrl++;
 
-          if (cik_ctrl == 5 && ('4' == *p || '0' == *p))
+          if (cik_ctrl == 4 && ('4' == *p || '0' == *p))
             cik_len_valid++;
         }
         ++p;
