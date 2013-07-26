@@ -51,7 +51,7 @@
 NVSettings_t GNV_Setting;
 
 // local defines
-#define ExositeAppVersion                   "   v1.02   "
+#define ExositeAppVersion                   "   v1.03   "
 #define SHOW_VERSION
 #define WRITE_INTERVAL 5
 #define EXO_BUFFER_SIZE 200

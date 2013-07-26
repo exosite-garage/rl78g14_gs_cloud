@@ -249,6 +249,9 @@ Exosite_Activate(void)
 {
   int length;
   char strLen[5];
+ // char cmp_ss[18] = "Content-Length: 40";
+  char *cmp_ss = "Content-Length: 40";
+  char *cmp = cmp_ss;
   int newcik = 0;
   int http_status = 0;
 
@@ -282,7 +285,6 @@ Exosite_Activate(void)
     char strBuf[RX_SIZE];
     unsigned char strLen, len;
     unsigned char cik_len_valid = 0;
-    unsigned char cik_ctrl = 0;
     char *p;
     unsigned char crlf = 0;
     unsigned char ciklen = 0;
@@ -304,16 +306,15 @@ Exosite_Activate(void)
         else
         {
           crlf = 0;
-          // check the cik length from http response
-          if (cik_ctrl == 0 && 'L' == *p) // Find 'L'ength:
-            cik_ctrl += 1;
-          else if (cik_ctrl == 3 && 'g' == *p) // Find Len'g'th:
-            cik_ctrl += 1;
-          else if (cik_ctrl >= 1 && cik_ctrl < 3)
-            cik_ctrl++;
-
-          if (cik_ctrl == 4 && ('4' == *p || '0' == *p))
-            cik_len_valid++;
+          if (*cmp == *p)
+          {
+            // check the cik length from http response
+            cmp++;
+            if (cmp > cmp_ss + strlen(cmp_ss) - 1)
+              cik_len_valid = 1;
+          }
+          else
+            cmp = cmp_ss;
         }
         ++p;
         --len;
@@ -324,9 +325,10 @@ Exosite_Activate(void)
       {
         // TODO, be more robust - match Content-Length header value to CIK_LENGTH
         unsigned char need, part;
-        if (!(cik_len_valid == 2)) // cik length != 40
+        if (!(cik_len_valid == 1)) // cik length != 40
         {
           status_code = EXO_STATUS_CONFLICT;
+          exoHAL_SocketClose(sock);
           return newcik;
         }
         need = CIK_LENGTH - ciklen;
