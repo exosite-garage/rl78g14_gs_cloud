@@ -25,10 +25,10 @@ http://supp.iar.com/Download/SW/?item=EWRL78-EVAL <br>
 5) Confirm SW5.2 is OFF then plug in the USB cable to your PC<br>
 6) Compile the project and download the program to the board<br>
 7) Press Switch 2 down before running program.
-8) Use a smart phone or a laptop that can select WiFi Access Point to connect to provision AP.
-9) Open http://192.168.240.1/prov.html, Select XXXX, input your SSID and pass phase then save.
-10) Stop program and press Switch 1 down before running program.
-11) Release Switch 1 when "Cloud Demo" shows on the LCD.
+8) Use a smart phone or a laptop that can select WiFi Access Point to connect to provision AP.<br>
+9) Open http://192.168.240.1/prov.html, Select XXXX, input your SSID and pass phase then save.<br>
+10) Stop program and press Switch 1 down before running program.<br>
+11) Release Switch 1 when "Cloud Demo" shows on the LCD.<br>
 12) If the module successfully associates with your WiFi Access Point and connects to the Exosite server, the device will exchange security keys and will be activated<br>
 13) When connected and activated, the device will send "ping", board temp and ADC1 values periodically<br>
 14) When connected, the LEDs on the board can be turned on and off from the cloud by modifying the "LED Control" command data source in your https://renesas.exosite.com Portal (or via the API).<br>
@@ -37,6 +37,10 @@ http://supp.iar.com/Download/SW/?item=EWRL78-EVAL <br>
 ========================================
 Release Info
 ========================================
+----------------------------------------
+Release 2013-07-29
+----------------------------------------
+--) improvement Exosite library in activation function
 ----------------------------------------
 Release 2013-05-03
 ----------------------------------------
