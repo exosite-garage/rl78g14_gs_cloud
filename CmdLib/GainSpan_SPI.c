@@ -428,8 +428,8 @@ bool GainSpan_SPI_SendByte(uint8_t aByte)
                     next = 0;
 
                 /* There is room for two bytes, now stuff the characters in */
-                GainSpan_SPI_SendByteLowLevel(GAINSPAN_SPI_CHAR_ESC);
-                GainSpan_SPI_SendByteLowLevel(aByte ^ 0x20);
+                placed = GainSpan_SPI_SendByteLowLevel(GAINSPAN_SPI_CHAR_ESC);
+                placed &= GainSpan_SPI_SendByteLowLevel(aByte ^ 0x20);
             }
             break;
         default:

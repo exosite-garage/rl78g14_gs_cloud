@@ -70,16 +70,18 @@ enum ExositeStatusCodes
 #define EXOSITE_MODEL_MAXLENGTH                  20
 #define EXOSITE_SN_MAXLENGTH                     EXOSITE_HAL_SN_MAXLENGTH
 #define EXOSITE_DEMO_UPDATE_INTERVAL            4000// ms
+#define EXOSITE_CA_NAME                         "GEO_CA"
 #define CIK_LENGTH                              40
 
 // functions for export
-int Exosite_Write(char * pbuf, unsigned char bufsize);
-int Exosite_Read(char * palias, char * pbuf, unsigned char buflen);
-int Exosite_Init(const char *vendor, const char *model, const unsigned char if_nbr, int reset);
-int Exosite_Activate(void);
-void Exosite_SetCIK(char * pCIK);
-int Exosite_GetCIK(char * pCIK);
-int Exosite_StatusCode(void);
-int Exosite_GetResponse(void);
+extern int Exosite_Write(char * pbuf, unsigned char bufsize);
+extern int Exosite_Read(char * palias, char * pbuf, unsigned char buflen);
+extern int Exosite_Init(const char *vendor, const char *model, const unsigned char if_nbr, int reset);
+extern int Exosite_Activate(void);
+extern int Exosite_SyncTime(void);
+extern void Exosite_SetCIK(char * pCIK);
+extern int Exosite_GetCIK(char * pCIK);
+extern int Exosite_StatusCode(void);
+extern int Exosite_GetResponse(void);
 #endif
 

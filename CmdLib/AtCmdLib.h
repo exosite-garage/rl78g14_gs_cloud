@@ -785,6 +785,12 @@ ATLIBGS_MSG_ID_E  AtLibGs_RegisterMDNSService(char *pServerName, char *pServerSu
                                              char *pProtocol,  char *pDomain, char *pPort,  char *pKey1 );
 ATLIBGS_MSG_ID_E AtLibGs_SetWEP1( int8_t *pWEP);
 
+ATLIBGS_MSG_ID_E
+    AtLibGs_AddCert(const char *name,
+                    bool isLocRam,
+                    const uint8_t *cert,
+                    uint16_t certSize);
+
 extern void AtLibGs_Init(void);
 
 // User supplied routines

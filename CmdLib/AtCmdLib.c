@@ -4906,7 +4906,7 @@ ATLIBGS_MSG_ID_E AtLibGs_GetCIDInfo(void)
  * Routine:  AtLibGs_BatterySetWarnLevel
  *---------------------------------------------------------------------------*
  * Description:
- *      Set the battery warning/standby level to enable the adaptor’s
+ *      Set the battery warning/standby level to enable the adaptor\92s
  *      internal battery measuring logic
  *    Sends the command:
  *     AT+BATTLVLSET=
@@ -5687,8 +5687,32 @@ ATLIBGS_MSG_ID_E  AtLibGs_RegisterMDNSService(char *pServerName, char *pServerSu
 	
 	return  AtLibGs_CommandSendString(cmd);
 }
+
+ATLIBGS_MSG_ID_E
+    AtLibGs_AddCert(const char *name,
+                    bool isLocRam,
+                    const uint8_t *cert,
+                    uint16_t certSize)
+{
+    char cmd[128];
+    const uint8_t escape[] = {0x1b, 'W'};
+    ATLIBGS_MSG_ID_E rxMsgId;
+
+    sprintf(cmd, "AT+TCERTADD=%s,0,%d,%d\r\n", name, certSize, (isLocRam ? 1 : 0));
+    
+    rxMsgId = AtLibGs_CommandSendString(cmd);
+    
+    if(rxMsgId != ATLIBGS_MSG_ID_OK)
+    {
+       return rxMsgId;
+    }
+    
+    AtLibGs_DataSend(escape, sizeof(escape));
+
+    AtLibGs_DataSend(cert,certSize);
+	
+    return AtLibGs_ResponseHandle();
+}
 /*-------------------------------------------------------------------------*
  * End of File:  AtCmdLib.c
  *-------------------------------------------------------------------------*/
-
-

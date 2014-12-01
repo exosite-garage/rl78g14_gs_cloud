@@ -34,7 +34,9 @@
 *****************************************************************************/
 #include "exosite_hal.h"
 #include "exosite_meta.h"
+#include "exosite.h"
 
+#include <stdio.h>
 #include <string.h>
 #include <apps/apps.h>
 #include <exosite/exosite.h>
@@ -60,6 +62,16 @@ enum lineTypes
   EMPTY_LINE
 };
 
+typedef struct
+{
+  char dayStr[3];
+  char monStr[4];
+  char yearStr[5];
+  char hourStr[3];
+  char minStr[3];
+  char secStr[3];
+} DateTime;
+
 #define STR_CIK_HEADER "X-Exosite-CIK: "
 #define STR_CONTENT_LENGTH "Content-Length: "
 #define STR_GET_URL "GET /onep:v1/stack/alias?"
@@ -73,21 +85,17 @@ enum lineTypes
 #define STR_CRLF "\r\n"
 
 // local functions
-int info_assemble(const char * vendor, const char *model, const char *sn);
-int init_UUID(unsigned char if_nbr);
-void update_m2ip(void);
-int get_http_status(long socket);
-long connect_to_exosite();
-void sendLine(long socket, unsigned char LINE, const char * payload);
+static int info_assemble(const char * vendor, const char *model, const char *sn);
+static int init_UUID(unsigned char if_nbr);
+static void update_m2ip(void);
+static int get_http_status(long socket);
+static long connect_to_exosite(char *);
+static long connect_to_exosite_with_server_addr(char *, unsigned char *);
+static void sendLine(long socket, unsigned char LINE, const char * payload);
+static int parse_datetime(const char *, int strLen, DateTime *);
+static int month_to_num(const char *month);
 
 // global functions
-int Exosite_Write(char * pbuf, unsigned char bufsize);
-int Exosite_Read(char * palias, char * pbuf, unsigned char buflen);
-int Exosite_Init(const char *vendor, const char *model, const unsigned char if_nbr, int reset);
-int Exosite_Activate(void);
-void Exosite_SetCIK(char * pCIK);
-int Exosite_GetCIK(char * pCIK);
-int Exosite_StatusCode(void);
 
 // externs
 extern char *itoa(int n, char *s, int b);
@@ -95,7 +103,6 @@ extern char *itoa(int n, char *s, int b);
 // global variables
 static int status_code = 0;
 static int exosite_initialized = 0;
-
 
 /*****************************************************************************
 *
@@ -110,7 +117,7 @@ static int exosite_initialized = 0;
 *          provisioning
 *
 *****************************************************************************/
-int
+static int
 info_assemble(const char * vendor, const char *model, const char *sn)
 {
   int info_len = 0;
@@ -249,11 +256,10 @@ Exosite_Activate(void)
 {
   int length;
   char strLen[5];
- // char cmp_ss[18] = "Content-Length: 40";
-  char *cmp_ss = "Content-Length: 40";
-  char *cmp = cmp_ss;
   int newcik = 0;
   int http_status = 0;
+  char *cmp_ss = "Content-Length: 40";
+  char *cmp = cmp_ss;
 
   if (!exosite_initialized) {
     status_code = EXO_STATUS_INIT;
@@ -261,7 +267,7 @@ Exosite_Activate(void)
   }
   update_m2ip();        //check our IP api to see if the old IP is advertising a new one
 
-  long sock = connect_to_exosite();
+  long sock = connect_to_exosite(EXOSITE_CA_NAME);
   if (sock < 0) {
     status_code = EXO_STATUS_BAD_TCP;
     return 0;
@@ -306,11 +312,12 @@ Exosite_Activate(void)
         else
         {
           crlf = 0;
-          if (*cmp == *p)
+          
+          if(*cmp == *p)
           {
             // check the cik length from http response
             cmp++;
-            if (cmp > cmp_ss + strlen(cmp_ss) - 1)
+            if(cmp > cmp_ss + strlen(cmp_ss) - 1)
               cik_len_valid = 1;
           }
           else
@@ -453,7 +460,7 @@ Exosite_Write(char * pbuf, unsigned char bufsize)
   }
 
 
-  long sock = connect_to_exosite();
+  long sock = connect_to_exosite(EXOSITE_CA_NAME);
   if (sock < 0) {
     status_code = EXO_STATUS_BAD_TCP;
     return 0;
@@ -528,7 +535,7 @@ Exosite_Read(char * palias, char * pbuf, unsigned char buflen)
   }
 
 
-  long sock = connect_to_exosite();
+  long sock = connect_to_exosite(EXOSITE_CA_NAME);
   if (sock < 0) {
     status_code = EXO_STATUS_BAD_TCP;
     return 0;
@@ -628,6 +635,55 @@ Exosite_Read(char * palias, char * pbuf, unsigned char buflen)
   return vlen;
 }
 
+int
+Exosite_SyncTime()
+{
+  char day[11];
+  char time[9];
+  int http_status = 0;
+  int strLen;
+  char *testStr = "GET /ip HTTP/1.1\r\n";
+  unsigned char serverAddr[6] = {54, 183, 115, 21, 0, 80};
+  char strBuf[RX_SIZE];
+  DateTime datetime;
+
+  if (!exosite_initialized)
+  {
+    return -1;
+  }
+
+  long sock = connect_to_exosite_with_server_addr("", serverAddr);
+  if (sock < 0)
+  {
+    return -1;
+  }
+
+  exoHAL_SocketSend(sock, testStr, strlen(testStr));
+  sendLine(sock, HOST_LINE, NULL);
+  sendLine(sock, ACCEPT_LINE, "\r\n");
+
+  http_status = get_http_status(sock);
+  if (200 != http_status)
+     return -1;
+
+  strLen = exoHAL_SocketRecv(sock, strBuf, RX_SIZE);
+
+  exoHAL_SocketClose(sock);
+
+  if(strLen <= 0)
+    return -1;
+     
+  if(parse_datetime(strBuf, strLen, &datetime) < 0)
+    return -1;
+
+  sprintf(day, "%s/%02d/%s", datetime.dayStr, month_to_num(datetime.monStr), datetime.yearStr);
+  sprintf(time, "%s:%s:%s", datetime.hourStr, datetime.minStr, datetime.secStr);
+
+  if(AtLibGs_SetTime(day, time) != ATLIBGS_MSG_ID_OK)
+    return -1;
+
+  return 0;
+}
 
 /*****************************************************************************
 *
@@ -640,7 +696,7 @@ Exosite_Read(char * palias, char * pbuf, unsigned char buflen)
 *  \brief  Checks /ip API to see if a new server IP address should be used
 *
 *****************************************************************************/
-void
+static void
 update_m2ip(void)
 {
   //TODO - stubbed out
@@ -658,8 +714,8 @@ update_m2ip(void)
 *  \brief  Establishes a connection with Exosite API server
 *
 *****************************************************************************/
-long
-connect_to_exosite(void)
+static long
+connect_to_exosite(char *caName)
 {
   unsigned char connectRetries = 0;
   unsigned char server[META_SERVER_SIZE];
@@ -685,6 +741,15 @@ connect_to_exosite(void)
       // return and let the caller retry us if they want
       continue;
     } else {
+      
+      if(caName != NULL && strlen(caName)!= 0)
+      {
+        if(exoHAL_ClientSSLOpen(sock, caName) < 0)
+        {
+          continue;
+        }
+      }
+      
       connectRetries = 0;
       break;
     }
@@ -694,6 +759,51 @@ connect_to_exosite(void)
   return sock;
 }
 
+static long
+connect_to_exosite_with_server_addr(char *caName,
+                                    unsigned char *server)
+{
+  unsigned char connectRetries = 0;
+  //unsigned char server[META_SERVER_SIZE];
+  long sock = -1;
+
+  //exosite_meta_read(server, META_SERVER_SIZE, META_SERVER);
+
+  while (connectRetries++ <= EXOSITE_MAX_CONNECT_RETRY_COUNT) {
+
+    sock = exoHAL_SocketOpenTCP(server);
+
+    if (sock == -1)
+    {
+      continue;
+    }
+
+    if (exoHAL_ServerConnect(sock) < 0)  // Try to connect
+    {
+      // TODO - the typical reason the connect doesn't work is because
+      // something was wrong in the way the comms hardware was initialized (timing, bit
+      // error, etc...). There may be a graceful way to kick the hardware
+      // back into gear at the right state, but for now, we just
+      // return and let the caller retry us if they want
+      continue;
+    } else {
+      
+      if(caName != NULL && strlen(caName)!= 0)
+      {
+        if(exoHAL_ClientSSLOpen(sock, caName) < 0)
+        {
+          continue;
+        }
+      }
+      
+      connectRetries = 0;
+      break;
+    }
+  }
+
+  // Success
+  return sock;
+}
 
 /*****************************************************************************
 *
@@ -706,7 +816,7 @@ connect_to_exosite(void)
 *  \brief  Reads first 12 bytes of HTTP response and extracts the 3 byte code
 *
 *****************************************************************************/
-int
+static int
 get_http_status(long socket)
 {
   char rxBuf[12];
@@ -738,7 +848,7 @@ get_http_status(long socket)
 *  \brief  Sends data out
 *
 *****************************************************************************/
-void
+static void
 sendLine(long socket, unsigned char LINE, const char * payload)
 {
   char strBuf[70];
@@ -805,6 +915,91 @@ sendLine(long socket, unsigned char LINE, const char * payload)
   exoHAL_SocketSend(socket, strBuf, strLen);
 
   return;
+}
+
+static int
+  parse_datetime(const char *strBuf,
+                 int strLen,
+                 DateTime *datetime)
+{
+  char copyStr[RX_SIZE];
+  char *token;
+  
+  memcpy(copyStr, strBuf, strLen);
+  
+  // use strtok to parse the string like " OK\r\nDate: Tue, 18 Nov 2014 08 53 45"
+  
+  if((token = strtok(copyStr, ",\r\n: ")) == NULL ||
+     strcmp(token, "OK") != 0)
+    return -1;
+  
+  if((token = strtok(NULL, ",\r\n: ")) == NULL ||
+     strcmp(token, "Date") != 0)
+    return -1;
+  
+  //Tue
+  if((token = strtok(NULL, ",\r\n: ")) == NULL ||
+     strlen(token) != 3)
+    return -1;
+  
+  //18
+  if((token = strtok(NULL, ",\r\n: ")) == NULL ||
+     strlen(token) != 2)
+       return -1;
+  
+  memcpy(datetime->dayStr, token, 3);
+  
+  //Nov
+  if((token = strtok(NULL, ",\r\n: ")) == NULL ||
+     strlen(token) != 3)
+       return -1;
+  
+  memcpy(datetime->monStr, token, 4);
+  
+  //2014
+  if((token = strtok(NULL, ",\r\n: ")) == NULL ||
+     strlen(token) != 4)
+       return -1;
+  
+  memcpy(datetime->yearStr, token, 5);
+  
+  //08
+  if((token = strtok(NULL, ",\r\n: ")) == NULL ||
+     strlen(token) != 2)
+       return -1;
+  
+  memcpy(datetime->hourStr, token, 3);
+  
+  //53
+  if((token = strtok(NULL, ",\r\n: ")) == NULL ||
+     strlen(token) != 2)
+       return -1;
+  
+  memcpy(datetime->minStr, token, 3);
+  
+  //45
+  if((token = strtok(NULL, ",\r\n: ")) == NULL ||
+     strlen(token) != 2)
+       return -1;
+  
+  memcpy(datetime->secStr, token, 3);
+  
+  return 0;
+}
+
+static int
+  month_to_num(const char *month)
+{
+  const char *monStr[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+ 
+  int i;
+  
+  for(i = 0; i < 12; ++i)
+    if(0 == strcmp(month, monStr[i]))
+      return i + 1;
+
+  return 0;
 }
 
 

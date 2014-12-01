@@ -12,7 +12,7 @@ The project functionality includes:<br>
 
 License is BSD, Copyright 2012, Exosite LLC (see LICENSE file)
 
-Tested and developed ith IAR for RL78 30-day evaluation 1.20.3.<br>
+Tested and developed ith IAR for RL78 30-day evaluation 1.40.5.<br>
 
 ========================================
 Quick Start
@@ -38,6 +38,10 @@ http://supp.iar.com/Download/SW/?item=EWRL78-EVAL <br>
 Release Info
 ========================================
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Release 2014-11-20
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--) modify the codebase, so that it can use https to connect the cloud
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Release 2013-07-29
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 --) improvement Exosite library in activation function
@@ -50,4 +54,10 @@ Release 2012-10-01
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 --) initial release<br>
 
-
+========================================
+Known Issue
+========================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1. The program will crash when the wifi connection is unstable / gets disconnected from the AP.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2. DNS not yet supported

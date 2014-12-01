@@ -84,7 +84,7 @@ void exosite_meta_init(int reset)
 *****************************************************************************/
 void exosite_meta_defaults(void)
 {
-  const unsigned char meta_server_ip[6] = {173,255,209,28,0,80};
+  const unsigned char meta_server_ip[6] = {54, 183, 115, 21, 0x01, 0xBB};
 
   exoHAL_EraseMeta(); //erase the information currently in meta
   exosite_meta_write((unsigned char *)meta_server_ip, 6, META_SERVER);     //store server IP

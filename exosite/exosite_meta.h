@@ -70,10 +70,10 @@ typedef enum
 } MetaElements;
 
 // functions for export
-void exosite_meta_defaults(void);
-void exosite_meta_init(int reset);
-void exosite_meta_write(unsigned char * write_buffer, unsigned short srcBytes, unsigned char element);
-void exosite_meta_read(unsigned char * read_buffer, unsigned short destBytes, unsigned char element);
+extern void exosite_meta_defaults(void);
+extern void exosite_meta_init(int reset);
+extern void exosite_meta_write(unsigned char * write_buffer, unsigned short srcBytes, unsigned char element);
+extern void exosite_meta_read(unsigned char * read_buffer, unsigned short destBytes, unsigned char element);
 
 #endif
 

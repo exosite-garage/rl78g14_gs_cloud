@@ -238,6 +238,7 @@ exoHAL_SocketOpenTCP(unsigned char *server)
 {
   int ip_len = 0;
   char serverip[20];
+  uint16_t port;
 
   if (cid != 0xff)
     return -1;
@@ -272,8 +273,9 @@ exoHAL_SocketOpenTCP(unsigned char *server)
 
   itoa(server[3], &serverip[ip_len], 10);
 
-  
-  AtLibGs_TCPClientStart(serverip, server[5], &cid);
+  port = server[4];
+  port = (port << 8) + (uint16_t)server[5];
+  AtLibGs_TCPClientStart(serverip, port, &cid);
 
   return (long)cid;
 }
@@ -365,6 +367,17 @@ exoHAL_SocketRecv(long socket, char * buffer, unsigned char len)
   }
 
   return 0;
+}
+
+long exoHAL_ClientSSLOpen(long socket, char caName[])
+{
+  if(AtLibGs_SSLOpen((uint8_t)socket, caName) !=  ATLIBGS_MSG_ID_OK)
+  {
+    exoHAL_SocketClose(socket);
+    return -1;
+  }
+  
+  return socket;
 }
 
 

@@ -40,17 +40,18 @@
 #define EXOSITE_HAL_SN_MAXLENGTH             25
 
 // functions for export
-int exoHAL_ReadUUID(unsigned char if_nbr, unsigned char * UUID_buf);
-void exoHAL_EnableMeta(void);
-void exoHAL_EraseMeta(void);
-void exoHAL_WriteMetaItem(unsigned char * buffer, unsigned char len, int offset);
-void exoHAL_ReadMetaItem(unsigned char * buffer, unsigned char len, int offset);
-void exoHAL_SocketClose(long socket);
-long exoHAL_SocketOpenTCP(unsigned char *server);
-long exoHAL_ServerConnect(long socket);
-unsigned char exoHAL_SocketSend(long socket, char * buffer, unsigned char len);
-unsigned char exoHAL_SocketRecv(long socket, char * buffer, unsigned char len);
-void exoHAL_MSDelay(unsigned short delay);
+extern int exoHAL_ReadUUID(unsigned char if_nbr, unsigned char * UUID_buf);
+extern void exoHAL_EnableMeta(void);
+extern void exoHAL_EraseMeta(void);
+extern void exoHAL_WriteMetaItem(unsigned char * buffer, unsigned char len, int offset);
+extern void exoHAL_ReadMetaItem(unsigned char * buffer, unsigned char len, int offset);
+extern void exoHAL_SocketClose(long socket);
+extern long exoHAL_SocketOpenTCP(unsigned char *server);
+extern long exoHAL_ServerConnect(long socket);
+extern long exoHAL_ClientSSLOpen(long socket, char caName[]);
+extern unsigned char exoHAL_SocketSend(long socket, char * buffer, unsigned char len);
+extern unsigned char exoHAL_SocketRecv(long socket, char * buffer, unsigned char len);
+extern void exoHAL_MSDelay(unsigned short delay);
 
 #endif
 
